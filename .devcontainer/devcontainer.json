@@ -1,0 +1,21 @@
+{
+  "name": "CRUD Workshop",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
+  "postCreateCommand": "pip install -r requirements.txt && python init_db.py && npm install -g @anthropic-ai/claude-code",
+  "forwardPorts": [5000],
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "editor.fontSize": 16,
+        "editor.tabSize": 4
+      },
+      "extensions": [
+        "ms-python.python"
+      ]
+    }
+  }
+}
