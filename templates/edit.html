@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>投稿を編集</h2>
+<form method="POST" action="/edit/{{ post['id'] }}">
+    <label for="title">タイトル</label>
+    <input type="text" id="title" name="title" value="{{ post['title'] }}" required>
+
+    <label for="body">本文</label>
+    <textarea id="body" name="body" rows="5" required>{{ post["body"] }}</textarea>
+
+    <button type="submit" class="btn">更新する</button>
+</form>
+<a href="/">← 一覧に戻る</a>
+{% endblock %}
+

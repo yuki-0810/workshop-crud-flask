@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>新規投稿</h2>
+<form method="POST" action="/create">
+    <label for="title">タイトル</label>
+    <input type="text" id="title" name="title" required>
+
+    <label for="body">本文</label>
+    <textarea id="body" name="body" rows="5" required></textarea>
+
+    <button type="submit" class="btn">投稿する</button>
+</form>
+<a href="/">← 一覧に戻る</a>
+{% endblock %}
+
