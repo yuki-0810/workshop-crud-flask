@@ -44,7 +44,7 @@
 
 ターミナルで `claude` と入力すると、AIコーディングアシスタントが起動します。
 
-### Anthropic Console アカウントのレmぇお
+### Anthropic Console アカウントの連携
 
 Claude Code を使うには **Anthropic Console のアカウント** との連携が必要です。
 - Enterpriseを使って良いのか要確認
