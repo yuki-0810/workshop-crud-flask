@@ -13,18 +13,52 @@
 3. 自動セットアップ完了後、ターミナルで `python app.py`
 4. ブラウザで掲示板アプリが表示されます
 
-## 📁 ファイル構成
+---
 
-| ファイル | 役割 | 改修レベル |
-|---------|------|-----------|
-| `static/style.css` | 見た目のスタイル | UI改修 |
-| `templates/*.html` | 画面のHTML | Frontend改修 |
-| `app.py` | サーバー処理 + DB操作 | Backend改修 |
-| `init_db.py` | テーブル定義 | DB改修 |
+## 📁 ファイル構成と役割
+
+| ファイル | 役割 | 変更すると何が変わるか |
+|---------|------|---------------------|
+| `app.py` | サーバー側の処理。URLごとの動作やデータベースの読み書きを定義 | データの保存・取得のルールが変わる（**Backend**） |
+| `init_db.py` | データベースのテーブル構造を定義。起動時に自動実行される | 保存できる項目（カラム）が変わる（**DB**） |
+| `posts.db` | データベースファイル。投稿データが保存されている | 直接は触らない（`app.py` 経由で操作する） |
+| `templates/base.html` | 全ページ共通のHTML枠（ヘッダー、タイトルなど） | 全画面の共通部分の見た目が変わる（**UI**） |
+| `templates/index.html` | 投稿一覧画面のHTML | 一覧の表示方法が変わる（**Frontend**） |
+| `templates/create.html` | 新規投稿フォームのHTML | 入力フォームの内容が変わる（**Frontend**） |
+| `templates/edit.html` | 編集フォームのHTML | 編集画面の内容が変わる（**Frontend**） |
+| `static/style.css` | 色・フォント・余白などのデザイン設定 | 見た目のデザインが変わる（**UI**） |
+
+### 要求と改修ファイルの関係
+
+| 要求の例 | 変更するファイル | 改修レベル |
+|---------|----------------|-----------|
+| 「ボタンの色を変えて」 | `style.css` のみ | **UI**（小） |
+| 「入力チェックを追加して」 | `templates/` | **Frontend**（中） |
+| 「投稿にカテゴリ項目を追加して」 | `app.py` + `init_db.py` + `templates/` | **Backend + DB**（大） |
+
+> **ポイント**: 変更するファイルの数が多いほど、改修の規模が大きい
+
+---
 
 ## 🤖 Claude Code
 
 ターミナルで `claude` と入力すると、AIコーディングアシスタントが起動します。
+
+### Anthropic Console アカウントのレmぇお
+
+Claude Code を使うには **Anthropic Console のアカウント** との連携が必要です。
+- Enterpriseを使って良いのか要確認
+
+### Codespace 上での初回セットアップ
+
+1. ターミナルで `claude` を実行
+2. 「Do you trust the files in this folder?」→ **Yes**
+3. 認証方法の選択 → **「Anthropic Console (OAuth)」** を選択
+4. 表示された認証URLをクリック → ブラウザで Anthropic Console にログイン → **「Allow」**
+5. ブラウザのタブを閉じて Codespace に戻る
+6. テーマ選択 → Light / Dark お好みで
+
+2回目以降は `claude` だけで直接起動します。
 
 ### 基本的な使い方
 
@@ -32,18 +66,55 @@
 > このプロジェクトの構成を教えて
 > 投稿一覧をカード形式のUIに変更して
 > 投稿に「いいね」機能を追加して
+> app.py の index 関数が何をしているか、初心者にもわかるように説明して
 ```
+
+> ファイルを変更する際は確認プロンプトが表示されます。「Yes」で承認すると変更が適用されます。
 
 ### Plan モード（計画だけ立てる）
 
 `Shift + Tab` で Plan モードに切り替え。実装前に「何をどう変えるか」を確認できます。
 
-## 📝 CRUD操作
+```
+> 投稿に「いいね」機能を追加したい。まずは計画だけ立てて、実装はまだしないで
+```
 
-| 操作 | URL | HTTP メソッド | 説明 |
-|------|-----|-------------|------|
-| Read | `/` | GET | 投稿一覧を表示 |
-| Create | `/create` | POST | 新しい投稿を作成 |
-| Update | `/edit/<id>` | POST | 投稿を編集 |
-| Delete | `/delete/<id>` | GET | 投稿を削除 |
+計画に納得したら：
 
+```
+> OK、この計画で実装して
+```
+
+### よく使う操作
+
+| 操作 | 方法 |
+|------|------|
+| 起動 | `claude` |
+| Plan モード切替 | `Shift + Tab` |
+| 変更を承認 | `Yes` または `y` |
+| 変更を拒否 | `No` または `n` |
+| 終了 | `/exit` または `Ctrl + C` |
+| 会話リセット | `/clear` |
+| ファイル指定 | `@ファイル名` |
+
+---
+
+## ⚠️ トラブルシューティング
+
+| 症状 | 対処法 |
+|------|--------|
+| `ModuleNotFoundError: No module named 'flask'` | `pip install flask` を実行 |
+| `OperationalError: no such table: posts` | `python init_db.py` を実行 |
+| `Address already in use` | `Ctrl + C` で停止してから `python app.py` |
+| `command not found: claude` | `npm install -g @anthropic-ai/claude-code` を実行 |
+| `API key not found` | 講師に確認 |
+| ポップアップが出ない | 画面下部「ポート」タブ → 5000番の地球アイコンをクリック |
+
+---
+
+## 🛑 終了時
+
+ワークショップ終了後は Codespace を停止または削除してください。
+
+- **停止**: 画面左下「Codespaces: xxxxxx」→「Stop Current Codespace」
+- **削除**: https://github.com/codespaces →「…」→「Delete」
